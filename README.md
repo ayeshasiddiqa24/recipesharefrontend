@@ -68,3 +68,76 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 ### `npm run build` fails to minify
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+
+
+# Recipe Sharing Platform - Frontend
+This is the React frontend for the Recipe Sharing Platform. It provides a responsive
+user interface for viewing, creating, and managing recipes, with image uploads and
+secure user authentication.
+## Features
+- User login and registration
+- View public and personal recipes
+- Upload recipes with image (to S3 via backend)
+- Delete own recipes
+- Responsive and modern UI using Tailwind CSS
+- Deployed on AWS Amplify with CI/CD from GitHub
+## Technology Stack
+- React.js (React Router v6)
+- Tailwind CSS
+- Axios (for API requests)
+- AWS Amplify (Hosting)
+- Route 53 (Custom Domain)
+## Installation (Local Development)
+1. Clone the repo
+```bash
+git clone https://github.com/yourname/recipe-frontend.git
+cd recipe-frontend
+```
+2. Install dependencies
+```bash
+npm install
+```
+3. Set environment variables
+Create a `.env` file:
+```env
+REACT_APP_API_URL=http://<backend-ec2-ip>:5000/api
+```
+4. Run the development server
+```bash
+npm start
+```
+## Deployment Guide (AWS Amplify)
+### Prerequisites
+- GitHub repository
+- Backend running on EC2
+### Steps
+1. Go to AWS Amplify -> Host Web App
+2. Connect your GitHub repo
+3. Set build settings:
+```yaml
+version: 1
+frontend:
+ phases:
+ preBuild:
+ commands:
+ - npm ci
+ build:
+ commands:
+ - npm run build
+ artifacts:
+ baseDirectory: build
+ files:
+ - '**/*'
+ cache:
+ paths:
+ - node_modules/**/*
+```
+4. Add environment variable:
+```
+REACT_APP_API_URL=http://<backend-ec2-ip>:5000/api
+```
+5. Deploy. Your app will be available at a public HTTPS Amplify URL.
+## Optional: Custom Domain
+- Add your domain in AWS Route 53
+- Go to Amplify -> Domain management -> Add custom domain
+- Use subdomain (e.g. `app.ayeshanuswa.com`)
